@@ -49,7 +49,7 @@ status: 已完成
 
 - **Novel Word Count**：统计文件夹内笔记数量与字数（我这个版本没装插件，也有字数）
 - **Number Headings**：自动给多级标题编号
-- **Git**：源自 [Obsidian 笔记软件使用教程 - steve.z - 博客园](https://www.cnblogs.com/zxhoo/p/19730901) 但我感觉手动传大版本比较好，定期比如10分钟，太琐碎了（可能适用于手机自动传git，电脑就手动传了：继承了脚本，改下commit message就行，很便捷 [commit_all.sh](..\tools\commit_all.sh)）
+- **Git**：源自 [Obsidian 笔记软件使用教程 - steve.z - 博客园](https://www.cnblogs.com/zxhoo/p/19730901) 但我感觉手动传大版本比较好，定期比如10分钟，太琐碎了（可能适用于手机自动传git，电脑就手动传了：继承了脚本，改下commit message就行，很便捷 [../tools/commit_all.sh](../tools/commit_all.sh)）
 
 ## 相关链接
 
