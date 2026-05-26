@@ -5,7 +5,7 @@ tags:
   - 语法
   - obisidian
   - markdown
-status: 更新中
+status: 已完成
 ---
 ## obisian特有语法
 ```
@@ -18,12 +18,12 @@ status: 更新中
 [[笔记名^uniqueID]]           引用特定段落
 ```
 
-[[入门obisidian]]
-[[入门obisidian#插件]]
-[[入门obisidian|替换文字]]
-[[入门obisidian#^c7c9f0]]
+[[obisidian_intro]]
+[[obisidian_intro#插件]]
+[[obisidian_intro|替换文字]]
+[[obisidian_intro#^c7c9f0]]
 
-![[入门obisidian]]
+![[obisidian_intro]]
 
 ctrl加鼠标悬浮在超链接上面 = 快速预览被链接的内容
 

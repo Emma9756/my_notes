@@ -20,13 +20,13 @@ status: 已完成
 - 用 obisidian 打开本地项目
 - 把 obisidian 的配置文件加在git ignore里面就行 ^c7c9f0
 
-![](assets/入门obisidian/file-20260526144615369.png)
+![](assets/obisidian_intro/file-20260526155809502.png)
 
 ## 插件
 ### custom attachment location
 源自抖音，改了2个地方的配置，让图片用md原生语法，自动在assets路径下面更新
-![](assets/入门obisidian/file-20260526144801242.png)
-![](assets/入门obisidian/file-20260526144849767.png)
+![](assets/obisidian_intro/file-20260526155809501.png)
+![](assets/obisidian_intro/file-20260526155809500.png)
 
 ### Templater
 说是支持JavaScript，用变量配置模板
