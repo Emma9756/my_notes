@@ -3,7 +3,7 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[feat](llm): add ds v4 code & docs"
+MAIN_COMMIT_MSG="[feat](fin): add nasdaq draft from gpt"
 SUB_COMMIT_MSG="[feat](mma): codex gen mma fp4"
 
 # ===== 可配置：子仓目录 =====
