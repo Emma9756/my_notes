@@ -1,10 +1,8 @@
-
 <%* 
 // 在模板中使用 JavaScript
 const title = await tp.system.prompt("输入笔记标题");
 const date = tp.date.now("YYYY-MM-DD");
 -%>
-
 ---
 title: "<% title %>"
 date: <% date %>
@@ -12,8 +10,16 @@ tags:
   - 理财
   - 健身
   - LLM
+status: 更新中
 ---
 
-# <% title %>
+## Intro
+
+
+## Content
+
+
+## Reference
+
  
  
