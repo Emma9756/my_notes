@@ -3,7 +3,7 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[fix](tools): add gitattributes lf & sh enable"
+MAIN_COMMIT_MSG="[fix](tools): update gitattributes"
 SUB_COMMIT_MSG="[feat](mma): codex gen mma fp4"
 
 # ===== 可配置：子仓目录 =====

@@ -1,7 +1,19 @@
+# Default: let Git detect text files
 * text=auto
 
+# Git config files
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.gitmodules text eol=lf
+
+# Scripts / docs / config
 *.sh text eol=lf
+*.ps1 text eol=lf
 *.md text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.json text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
