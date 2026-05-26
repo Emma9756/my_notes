@@ -1,5 +1,9 @@
-$gitBin = "C:\Program Files\Git\bin"
-$gitCmd = "C:\Program Files\Git\cmd"
+# $gitBin = "C:\Program Files\Git\bin"
+# $gitCmd = "C:\Program Files\Git\cmd"
+
+# rog
+$gitBin = "D:\git\Git\bin"
+$gitCmd = "D:\git\Git\cmd"
 
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
 
