@@ -1,8 +1,10 @@
 ---
+title: obisidian_intro
 date: 2026-05-26
 tags:
   - 笔记
   - obisidian
+  - from_me
 status: 已完成
 ---
 

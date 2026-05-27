@@ -1,10 +1,12 @@
 ---
+title: grammar_quick_research
 date: 2026-05-26
 tags:
   - 笔记
   - 语法
   - obisidian
   - markdown
+  - from_link
 status: 已完成
 ---
 ## obisian特有语法

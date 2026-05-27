@@ -3,6 +3,7 @@ title: suggestion_from_gpt
 date: 2026-05-27
 tags:
   - 笔记
+  - from_gpt
 status: 更新中
 ---
 

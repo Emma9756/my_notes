@@ -3,8 +3,8 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[feat](llm): gpt gen llm drafts"
-SUB_COMMIT_MSG="[fix](mm): add code version"
+MAIN_COMMIT_MSG="[fix](tools): add tags"
+SUB_COMMIT_MSG="[fix](tools): add tags"
 
 # ===== 可配置：子仓目录 =====
 SUBMODULE_PATH="work_notes"

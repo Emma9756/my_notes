@@ -1,3 +1,12 @@
+---
+title: hold_abc
+date: 2026-05-27
+tags:
+  - mm
+  - from_gpt
+status: 更新中
+---
+
 我没有看到你提到的图示，但在 CUDA GEMM 里，“hold A / hold B / hold C”通常指 **在计算过程中优先让 A、B、C 中哪一个矩阵块长期驻留在片上资源中**，例如 shared memory、register 或 warp/thread tile 中。它们本质上都是在算：
 
 $$C = A \times B + C$$

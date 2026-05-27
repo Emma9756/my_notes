@@ -3,6 +3,7 @@ title: cuda_basics
 date: 2026-05-27
 tags:
   - cuda
+  - from_gpt
 status: 更新中
 ---
 
