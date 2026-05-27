@@ -3,8 +3,8 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[feat](mm): codex gen mm intro"
-SUB_COMMIT_MSG="[feat](mm): codex gen mm intro"
+MAIN_COMMIT_MSG="[feat](mm): gpt gen hold abc intro"
+SUB_COMMIT_MSG="[fix](mm): add code version"
 
 # ===== 可配置：子仓目录 =====
 SUBMODULE_PATH="work_notes"
