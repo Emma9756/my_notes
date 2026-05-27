@@ -3,8 +3,8 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[fix](tools): add tags"
-SUB_COMMIT_MSG="[fix](tools): add tags"
+MAIN_COMMIT_MSG="[feat](life): gpt gen eye suggestion"
+SUB_COMMIT_MSG="[feat](mm): codex gen mm api intro with case"
 
 # ===== 可配置：子仓目录 =====
 SUBMODULE_PATH="work_notes"
