@@ -3,7 +3,7 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[feat](mm): gpt gen hold abc intro"
+MAIN_COMMIT_MSG="[feat](llm): gpt gen llm drafts"
 SUB_COMMIT_MSG="[fix](mm): add code version"
 
 # ===== 可配置：子仓目录 =====
