@@ -3,7 +3,7 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[fix](life): gpt gen eye suggestion add"
+MAIN_COMMIT_MSG="[fix](common): update submodule link"
 SUB_COMMIT_MSG="[feat](mm): codex gen mm api intro with case"
 
 # ===== 可配置：子仓目录 =====
