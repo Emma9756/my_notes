@@ -3,8 +3,8 @@
 set -e
 
 # ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[feat](common): add repository suggestion from gpt"
-SUB_COMMIT_MSG="[feat](mma): codex gen mma fp4"
+MAIN_COMMIT_MSG="[feat](mm): codex gen mm intro"
+SUB_COMMIT_MSG="[feat](mm): codex gen mm intro"
 
 # ===== 可配置：子仓目录 =====
 SUBMODULE_PATH="work_notes"
@@ -28,16 +28,23 @@ fi
 
 # 记录主仓是否需要提交
 MAIN_NEEDS_COMMIT=false
+SUBMODULE_BRANCH="main"
 
 # ===== 1. 处理子仓 work_notes =====
 cd "$SUBMODULE_PATH"
+
+if ! git symbolic-ref --quiet --short HEAD >/dev/null; then
+  echo "==> Submodule is in detached HEAD. Switching to $SUBMODULE_BRANCH..."
+  git fetch origin
+  git switch "$SUBMODULE_BRANCH" || git switch -c "$SUBMODULE_BRANCH" "origin/$SUBMODULE_BRANCH"
+fi
 
 if has_changes; then
   echo "==> Submodule has changes. Committing..."
 
   git add .
   git commit -m "$SUB_COMMIT_MSG"
-  git push
+  git push origin "$SUBMODULE_BRANCH"
 
   MAIN_NEEDS_COMMIT=true
 else
