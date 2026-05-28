@@ -12,6 +12,7 @@ status: 更新中
  ```bash
 # set子仓
 git submodule add git@github.com:Emma9756/work_notes.git work_notes
+git submodule add git@github.com:Emma9756/secrets.git secrets
 
 # get子仓
 git submodule update --init --recursive

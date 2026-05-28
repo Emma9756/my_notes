@@ -2,14 +2,58 @@
 
 set -e
 
-# ===== 可配置：提交信息 =====
-MAIN_COMMIT_MSG="[fix](common): update submodule link"
-SUB_COMMIT_MSG="[feat](mm): codex gen mm api intro with case"
+# ===== 可配置：子仓列表 =====
+# 格式: "path|default_commit_msg"
+SUBMODULES=(
+  "work_notes|[feat](mm): codex gen mm api intro with case"
+  "secrets|[feat](fitness): refactor body script & data"
+)
 
-# ===== 可配置：子仓目录 =====
-SUBMODULE_PATH="work_notes"
+# ===== 可配置：主仓默认提交信息 =====
+MAIN_DEFAULT_MSG="[chore](common): update submodule refs"
 
-# ===== 工具函数：判断当前仓库是否有变动 =====
+# ===== 可配置：默认分支 =====
+DEFAULT_BRANCH="main"
+
+# ===== 使用说明 =====
+usage() {
+  echo "Usage: $0 [-m <main commit msg>] [-s <submodule> -m <msg>]..."
+  echo ""
+  echo "  一键提交 my_notes 主仓及其子仓的变动。"
+  echo "  自动检测各子仓是否有未提交变更，分别提交后更新主仓指针。"
+  echo ""
+  echo "  -m <msg>        主仓提交信息（覆盖默认）"
+  echo "  -s <name> <msg> 指定某个子仓的提交信息"
+  echo "  -h              显示帮助"
+  echo ""
+  echo "  子仓: $(printf '%s ' "${SUBMODULES[@]}" | sed 's/|[^ ]*//g')"
+  echo ""
+  echo "  示例:"
+  echo "    $0                          # 自动检测，使用默认信息提交"
+  echo "    $0 -m '[fix] urgent fix'    # 自定义主仓信息"
+  echo "    $0 -s secrets '[fix](fitness): correct W3 scores'"
+  exit 0
+}
+
+# ===== 解析参数 =====
+MAIN_MSG="$MAIN_DEFAULT_MSG"
+declare -A SUB_MSGS
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h) usage ;;
+    -m)
+      MAIN_MSG="$2"
+      shift 2 ;;
+    -s)
+      key="$2"
+      SUB_MSGS["$key"]="$3"
+      shift 3 ;;
+    *) shift ;;
+  esac
+done
+
+# ===== 工具函数 =====
 has_changes() {
   # 有未暂存变动
   ! git diff --quiet || \
@@ -19,55 +63,83 @@ has_changes() {
   [ -n "$(git ls-files --others --exclude-standard)" ]
 }
 
-echo "==> Checking submodule: $SUBMODULE_PATH"
+ensure_branch() {
+  local branch="$1"
+  if ! git symbolic-ref --quiet --short HEAD >/dev/null; then
+    echo "  -> detached HEAD, switching to $branch..."
+    git fetch origin 2>/dev/null || true
+    git switch "$branch" 2>/dev/null || git switch -c "$branch" "origin/$branch" 2>/dev/null || true
+  fi
+}
 
-if [ ! -d "$SUBMODULE_PATH/.git" ] && [ ! -f "$SUBMODULE_PATH/.git" ]; then
-  echo "Error: $SUBMODULE_PATH does not look like a Git submodule."
-  exit 1
-fi
+# ===== 主流程 =====
+echo "=========================================="
+echo "  my_notes 一键提交"
+echo "=========================================="
 
-# 记录主仓是否需要提交
 MAIN_NEEDS_COMMIT=false
-SUBMODULE_BRANCH="main"
+ROOT_DIR="$(pwd)"
 
-# ===== 1. 处理子仓 work_notes =====
-cd "$SUBMODULE_PATH"
-
-if ! git symbolic-ref --quiet --short HEAD >/dev/null; then
-  echo "==> Submodule is in detached HEAD. Switching to $SUBMODULE_BRANCH..."
-  git fetch origin
-  git switch "$SUBMODULE_BRANCH" || git switch -c "$SUBMODULE_BRANCH" "origin/$SUBMODULE_BRANCH"
-fi
-
-if has_changes; then
-  echo "==> Submodule has changes. Committing..."
-
-  git add .
-  git commit -m "$SUB_COMMIT_MSG"
-  git push origin "$SUBMODULE_BRANCH"
-
-  MAIN_NEEDS_COMMIT=true
-else
-  echo "==> No changes in submodule."
-fi
-
-cd ..
-
-# ===== 2. 判断主仓是否有变动 =====
-# 注意：如果子仓刚刚提交了新 commit，主仓会显示 work_notes 指针变化
+# 先检查主仓本身的非子仓文件是否有变更
 if has_changes; then
   MAIN_NEEDS_COMMIT=true
 fi
 
-# ===== 3. 处理主仓 my_notes =====
+# 处理每个子仓
+for entry in "${SUBMODULES[@]}"; do
+  path="${entry%%|*}"
+  default_msg="${entry#*|}"
+
+  echo ""
+  echo "==> 子仓: $path"
+
+  if [ ! -d "$path/.git" ] && [ ! -f "$path/.git" ]; then
+    echo "  [跳过] 不是 git 子仓"
+    continue
+  fi
+
+  pushd "$path" > /dev/null
+
+  ensure_branch "$DEFAULT_BRANCH"
+
+  if has_changes; then
+    msg="${SUB_MSGS[$path]:-$default_msg}"
+
+    echo "  变更内容:"
+    git status --short
+    echo ""
+
+    git add .
+    git commit -m "$msg"
+    git push origin "$DEFAULT_BRANCH" 2>/dev/null || git push origin HEAD
+
+    echo "  [已提交] $msg"
+    MAIN_NEEDS_COMMIT=true
+  else
+    echo "  [无变更]"
+  fi
+
+  popd > /dev/null
+done
+
+# ===== 处理主仓 =====
+echo ""
+
 if [ "$MAIN_NEEDS_COMMIT" = true ]; then
-  echo "==> Main repo has changes. Committing..."
+  echo "==> 主仓 (my_notes)"
+
+  echo "  变更内容:"
+  git status --short
+  echo ""
 
   git add .
-  git commit -m "$MAIN_COMMIT_MSG"
+  git commit -m "$MAIN_MSG"
   git push
+
+  echo "  [已提交] $MAIN_MSG"
 else
-  echo "==> No changes in main repo."
+  echo "==> 主仓无变更，跳过。"
 fi
 
-echo "==> Done."
+echo ""
+echo "==> 全部完成。"
