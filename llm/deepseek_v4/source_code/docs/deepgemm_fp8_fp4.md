@@ -1,3 +1,19 @@
+---
+title: "deepgemm_fp8_fp4"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #算子
+  - #gemm
+  - #fp8
+  - #fp4
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # `m_grouped_fp8_fp4_gemm_nt_contiguous` CUDA Walkthrough
 
 这份文档面向 CUDA 初学者，目标不是把所有模板细节讲完，而是把这条调用链讲清楚：

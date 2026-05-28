@@ -1,3 +1,15 @@
+---
+title: "V4_select"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 ### 5.3 Window 索引
 
 ```python

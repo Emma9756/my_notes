@@ -2,10 +2,11 @@
 title: NASDAQ compare from gpt&ds pro
 date: 2026-05-28
 tags:
-  - 理财
-  - 纳指
-  - from_gpt
-  - from_ds
+  - #理财
+  - #纳指
+  - #from_gpt
+  - #from_ds
+  - #待整理
 status: 更新中
 ---
 下面按 **天天基金/东方财富 2026-05-26 净值收益、2026-03-31 规模** 统一口径整理。  

@@ -1,3 +1,14 @@
+---
+title: "hot_commands"
+date: 2026-05-28
+tags:
+  - #工具
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 
 ---
 title: "hot_commands"

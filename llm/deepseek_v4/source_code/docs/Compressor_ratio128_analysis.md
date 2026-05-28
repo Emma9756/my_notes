@@ -1,3 +1,15 @@
+---
+title: "Compressor_ratio128_analysis"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # `compress_ratio=128` 下 `Compressor / compress_kv` 详细解析
 
 本文只聚焦 `compress_ratio=128` 时主 `Compressor` 的执行过程，也就是远历史 `compressed kv` 是如何生成的。

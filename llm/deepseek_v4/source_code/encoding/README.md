@@ -1,3 +1,16 @@
+---
+title: "README"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #deepseek
+  - #tokenizer
+  - #README
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # DeepSeek-V4 Encoding
 
 This document describes the prompt encoding format used by DeepSeek-V4 series models. The encoding handles multi-turn conversations, tool calling, extended thinking (reasoning), and quick instruction tasks.

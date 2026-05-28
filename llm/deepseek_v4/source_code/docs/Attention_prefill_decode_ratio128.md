@@ -1,3 +1,16 @@
+---
+title: "Attention_prefill_decode_ratio128"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #flash_attention
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # Attention 中 `sparse_attn` 的 `prefill` / `decode` 计算过程（`compress_ratio=128`）
 
 本文只聚焦 `compress_ratio=128` 时，`Attention.forward` 里 `sparse_attn` 的执行过程。

@@ -2,8 +2,11 @@
 title: cuda_basics
 date: 2026-05-27
 tags:
-  - cuda
-  - from_gpt
+  - #LLM
+  - #cuda
+  - #笔记
+  - #from_me
+  - #待整理
 status: 更新中
 ---
 

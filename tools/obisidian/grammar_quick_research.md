@@ -2,11 +2,11 @@
 title: grammar_quick_research
 date: 2026-05-26
 tags:
-  - 笔记
-  - 语法
-  - obisidian
-  - markdown
-  - from_link
+  - #工具
+  - #obsidian
+  - #笔记
+  - #from_me
+  - #待整理
 status: 已完成
 ---
 ## obisian特有语法

@@ -1,3 +1,15 @@
+---
+title: "Indexer_ratio4_analysis"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # `compress_ratio=4` 下 `Indexer` 详细解析
 
 本文只聚焦 `compress_ratio=4` 时 `Indexer` 的执行过程，也就是它如何从压缩后的历史 KV 中选出最值得看的压缩块。

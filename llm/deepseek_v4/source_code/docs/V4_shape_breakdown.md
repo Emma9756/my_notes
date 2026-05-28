@@ -1,3 +1,15 @@
+---
+title: "V4_shape_breakdown"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # DeepSeek-V4 逐步解析与 Shape 标注
 
 ALL CORRECT (after reading 0513 17:30)

@@ -5,12 +5,12 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](mm): codex gen mm api intro with case"
-  "secrets|[fix](life): me update eyes"
+  "work_notes|[fix](tag): ds update tags"
+  "secrets|[fix](tag): ds update tags"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[fix](tools): mv obisidian dir"
+MAIN_DEFAULT_MSG="[fix](tag): ds update tags"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"

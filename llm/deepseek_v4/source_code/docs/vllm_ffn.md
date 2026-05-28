@@ -1,3 +1,16 @@
+---
+title: "vllm_ffn"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #推理
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # DeepSeek V4 `deepseek_v4.py:1256` `ffn` 计算梳理
 
 本文对应 [`vllm/model_executor/models/deepseek_v4.py`](../vllm/model_executor/models/deepseek_v4.py) 第 `1256` 行：

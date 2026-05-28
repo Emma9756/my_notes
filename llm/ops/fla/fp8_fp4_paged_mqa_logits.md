@@ -2,9 +2,14 @@
 title: fp8_fp4_paged_mqa_logits
 date: 2026-05-27
 tags:
-  - fla
-  - ds_v4
-  - from_gpt
+  - #LLM
+  - #flash_attention
+  - #算子
+  - #fp8
+  - #fp4
+  - #笔记
+  - #from_me
+  - #待整理
 status: 更新中
 ---
 

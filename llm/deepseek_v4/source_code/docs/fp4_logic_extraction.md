@@ -1,3 +1,16 @@
+---
+title: "fp4_logic_extraction"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #fp4
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # FP4 Logic Extraction From `inference/model.py`
 
 本文直接把关键代码节选嵌进来，避免来回跳转，重点解释：

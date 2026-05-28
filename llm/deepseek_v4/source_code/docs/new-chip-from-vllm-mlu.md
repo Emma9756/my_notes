@@ -1,3 +1,16 @@
+---
+title: "new-chip-from-vllm-mlu"
+date: 2026-05-28
+tags:
+  - #LLM
+  - #推理
+  - #deepseek
+  - #笔记
+  - #from_me
+  - #待整理
+status: 待整理
+---
+
 # 从 vllm-mlu 出发，为新芯片搭建推理框架
 
 ## 1. 文档目标
