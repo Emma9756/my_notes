@@ -6,11 +6,11 @@ set -e
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[feat](mm): codex gen mm api intro with case"
-  "secrets|[feat](fitness): refactor body script & data"
+  "secrets|[fix](life): me update eyes"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[chore](common): update submodule refs"
+MAIN_DEFAULT_MSG="[fix](invest): ds update nasdaq data"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"
