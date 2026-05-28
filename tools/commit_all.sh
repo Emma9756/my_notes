@@ -10,7 +10,7 @@ SUBMODULES=(
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[fix](invest): ds update nasdaq data"
+MAIN_DEFAULT_MSG="[fix](tools): mv obisidian dir"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"
