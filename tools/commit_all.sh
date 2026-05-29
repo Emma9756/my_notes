@@ -6,11 +6,11 @@ set -e
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[fix](tag): ds update tags"
-  "secrets|[fix](tag): ds update tags"
+  "secrets|[fix](fitness): add check and data fix"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[fix](tag): ds update tags"
+MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"
