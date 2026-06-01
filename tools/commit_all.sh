@@ -6,7 +6,7 @@ set -e
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[fix](tag): ds update tags"
-  "secrets|[fix](fitness): update eyes"
+  "secrets|[fix](fitness): update data & review py"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
