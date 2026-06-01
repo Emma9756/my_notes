@@ -5,12 +5,12 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[fix](tag): ds update tags"
-  "secrets|[fix](fitness): update data & review py"
+  "work_notes|[feat](mm): codex add holdAB & update C & add mma align"
+  "secrets|[fix](fitness): update data today"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
+MAIN_DEFAULT_MSG="[fix](common): rm notes tag"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"

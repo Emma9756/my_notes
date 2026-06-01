@@ -5,7 +5,6 @@ tags:
   - #LLM
   - #fp4
   - #deepseek
-  - #笔记
   - #from_me
   - #待整理
 status: 待整理

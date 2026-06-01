@@ -4,7 +4,6 @@ date: 2026-05-26
 tags:
   - #工具
   - #obsidian
-  - #笔记
   - #from_me
   - #待整理
 status: 已完成
