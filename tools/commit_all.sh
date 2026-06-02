@@ -6,7 +6,7 @@ set -e
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[feat](mm): codex add holdAB & update C & add mma align"
-  "secrets|[feat](fitness): enable apple data parse & update data today"
+  "secrets|[fix](fitness): update data today"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
