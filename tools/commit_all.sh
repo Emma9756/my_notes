@@ -5,8 +5,8 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](mm): codex add holdAB & update C & add mma align"
-  "secrets|[feat](todo): add todo"
+  "work_notes|[feat](mm): me update holdAB"
+  "secrets|[fix](todo): update todo"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
