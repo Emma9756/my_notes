@@ -5,7 +5,7 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[fix](mm): codex update holdab swizzle"
+  "work_notes|[feat](arch): add llc & xpc pic"
   "secrets|[fix](todo): update todo & fit"
 )
 
