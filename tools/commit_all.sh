@@ -6,7 +6,7 @@ set -e
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[feat](mm): me update holdAB"
-  "secrets|[fix](todo): update todo"
+  "secrets|[fix](todo): update todo & fit"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
