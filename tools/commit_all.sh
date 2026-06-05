@@ -5,8 +5,8 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](arch): codex update dma&queue&set wait intro"
-  "secrets|[fix](todo): me update todo & fit & add note"
+  "work_notes|[fix](arch): codex update queue"
+  "secrets|[fix](git): me update fit"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
