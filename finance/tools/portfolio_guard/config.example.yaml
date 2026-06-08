@@ -1,0 +1,46 @@
+base_currency: CNY
+
+fx_rates:
+  CNY: 1
+  USD: 7.2
+  HKD: 0.92
+
+targets:
+  asset_classes:
+    A股: 0.30
+    美股: 0.25
+    港股: 0.15
+    黄金: 0.15
+    现金: 0.15
+  symbols:
+    510300.SH: 0.18
+    000001.OF: 0.12
+    AAPL: 0.10
+    NASDAQ_FUND: 0.15
+    2800.HK: 0.15
+    518880.SH: 0.15
+    CASH: 0.15
+
+rules:
+  rebalance:
+    # 目标占比和当前占比差距达到 3 个百分点才提示。
+    drift_threshold: 0.03
+    # 小于 500 元的动作忽略，避免报告里出现过小交易。
+    min_trade_amount: 500
+
+  drawdown_buy:
+    enabled: true
+    # 历史价格从阶段高点回撤 8% 以上，触发规则型加仓提示。
+    threshold: -0.08
+    # 单次最多使用现金仓的 25%。
+    cash_pct: 0.25
+    min_trade_amount: 500
+
+  gain_sell:
+    enabled: true
+    # 区间收益达到 15% 且超过目标仓位时，触发规则型减仓提示。
+    threshold: 0.15
+    # 对超过目标仓位的部分卖出 50%。
+    sell_excess_pct: 0.5
+    min_trade_amount: 500
+

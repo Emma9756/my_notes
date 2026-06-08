@@ -5,12 +5,13 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[fix](arch): codex update queue"
-  "secrets|[fix](git): me update fit"
+  "work_notes|[feat](common): codex update queue & gen fp8 mm"
+  "secrets|[feat](common): me update fit&to&note*3"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
+MAIN_DEFAULT_MSG="[feat](fin): codex gen 1st py finance"
+# MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"

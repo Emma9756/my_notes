@@ -1,0 +1,23 @@
+symbol,name,source,kind,currency,enabled
+510300,300ETF,akshare,etf,CNY,1
+159361,A500E,akshare,etf,CNY,1
+513120,HK创新药,akshare,etf,CNY,1
+159995,芯片ETF,akshare,etf,CNY,1
+513050,中概互联,akshare,etf,CNY,1
+09988,阿里巴巴,akshare,hk_stock,HKD,1
+002594,比亚迪,akshare,a_stock,CNY,1
+00700,腾讯控股,akshare,hk_stock,HKD,1
+161226,白银基金,akshare,lof,CNY,1
+603993,洛阳钼业,akshare,a_stock,CNY,1
+000426,兴业银锡,akshare,a_stock,CNY,1
+601899,紫金矿业,akshare,a_stock,CNY,1
+513500,标普500,akshare,etf,CNY,1
+159941,纳指ETF,akshare,etf,CNY,1
+159509,纳指科技,akshare,etf,CNY,1
+601288,农业银行,akshare,a_stock,CNY,1
+000858,五 粮 液,akshare,a_stock,CNY,1
+601318,中国平安,akshare,a_stock,CNY,1
+518880,黄金ETF,akshare,etf,CNY,1
+511090,30年国债,akshare,etf,CNY,1
+511010,国债ETF,akshare,etf,CNY,1
+511260,十年国债,akshare,etf,CNY,1
