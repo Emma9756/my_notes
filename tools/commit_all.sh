@@ -5,7 +5,7 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](mm): codex gen gmm"
+  "work_notes|[feat](arch): other gen core"
   "secrets|[feat](fit): codex update sports add&review"
 )
 
