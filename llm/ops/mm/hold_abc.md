@@ -5,9 +5,8 @@ tags:
   - #LLM
   - #算子
   - #gemm
-  - #from_me
-  - #待整理
-status: 更新中
+  - #from_gpt
+  - #更新中
 ---
 
 我没有看到你提到的图示，但在 CUDA GEMM 里，“hold A / hold B / hold C”通常指 **在计算过程中优先让 A、B、C 中哪一个矩阵块长期驻留在片上资源中**，例如 shared memory、register 或 warp/thread tile 中。它们本质上都是在算：
@@ -168,7 +167,7 @@ Hold A 更适合：
 
 $$C_i = A \times B_i$$
 
-其中 A 不变，B_i 很多。
+其中 A 不变，B_i 很多（B越多，holdA越划算）。
 
 ---
 
@@ -515,7 +514,7 @@ BM | A_panel  |    x   BK  | B_panel  |
                  BN
 ```
 
-每个 CTA / warp group / warp 负责一个 (C_{BM \times BN}) tile。
+每个 CTA / warp group / warp 负责一个 $C_{BM \times BN}$ tile。
 
 伪代码：
 
@@ -726,7 +725,7 @@ $$I_A
 \approx
 \frac{2 \cdot 128 \cdot P \cdot 128}
 {2(128 + 128P)}
-===============
+=
 
 \frac{128P}{1+P}$$
 
@@ -1051,7 +1050,7 @@ M 大，N 小：偏 hold B
 
 ## 大方阵 GEMM
 
-例如 (M=N=K \ge 4096)：
+例如 $M=N=K \ge 4096$：
 
 * 理想 AI 很高；
 * 只要实现足够好，通常更容易 compute-bound；

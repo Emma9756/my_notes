@@ -5,8 +5,8 @@ set -e
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](arch): codex gen perf test for dma&mma"
-  "secrets|[fix](fit): me update fit"
+  "work_notes|[feat](mm): codex gen gmm"
+  "secrets|[feat](fit): codex update sports add&review"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
