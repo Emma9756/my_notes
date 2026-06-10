@@ -1,6 +1,6 @@
 # Portfolio Guard
 
-`portfolio_guard` 是一个本地轻量投资组合工具，用于把分散在支付宝场外、南方 app 场外、银河证券场内等平台的持仓统一汇总，并按自定义目标配比生成规则型操作提示。
+`portfolio_guard` 是一个本地轻量投资组合工具，用于维护银河证券场内持仓，并按自定义目标配比生成规则型操作提示。
 
 它不是券商交易工具，也不会自动下单。输出内容是基于本地配置的机械提示，不构成投资建议。
 
@@ -9,7 +9,7 @@
 1. 汇总当前市值和配比
    - 按平台、资产类别、市场、证券类型聚合。
    - 支持人民币、美元、港币等通过配置汇率换算到统一基准币种。
-   - 支持场外基金、场内 ETF、个股、黄金、现金。
+   - 当前只保留银河证券场内口径，支持场内 ETF、LOF、个股、黄金、债券和现金。
 
 2. 计算历史参考指标
    - 读取本地 `prices.csv` 历史价格。
@@ -46,6 +46,15 @@ python3 my_notes/finance/tools/portfolio_guard/portfolio_guard.py update-prices 
   --prices my_notes/finance/tools/portfolio_guard/sample/prices.csv \
   --start 20240101 \
   --end 20260608
+```
+
+联网更新最近行情，适合定时任务反复执行：
+
+```bash
+python3 my_notes/finance/tools/portfolio_guard/portfolio_guard.py update-latest \
+  --instruments my_notes/finance/tools/portfolio_guard/instruments.csv \
+  --prices my_notes/finance/tools/portfolio_guard/sample/prices.csv \
+  --lookback-days 10
 ```
 
 查看输出：
@@ -122,13 +131,13 @@ http://127.0.0.1:8765
 
 | 字段 | 含义 |
 |---|---|
-| `account` | 账户名，例如支付宝、南方、银河 |
-| `platform` | 平台，例如支付宝场外、南方app场外、银河证券场内 |
+| `account` | 账户名，例如银河 |
+| `platform` | 平台，当前固定使用银河证券场内 |
 | `symbol` | 标的代码；现金用 `CASH` |
 | `name` | 标的名称 |
 | `market` | A股、美股、港股、黄金、现金等 |
 | `asset_class` | 用于目标配比的资产类别 |
-| `security_type` | 场外基金、ETF、个股、现金等 |
+| `security_type` | ETF、LOF、个股、现金等 |
 | `currency` | CNY、USD、HKD |
 | `quantity` | 份额或股数 |
 | `price` | 当前价格或净值 |
@@ -162,13 +171,14 @@ fx_rates:
 targets:
   asset_classes:
     A股: 0.30
-    美股: 0.25
-    港股: 0.15
+    港股: 0.20
     黄金: 0.15
+    贵金属: 0.10
+    债券: 0.10
     现金: 0.15
   symbols:
-    510300.SH: 0.18
-    NASDAQ_FUND: 0.15
+    510300: 0.18
+    09988: 0.12
     CASH: 0.15
 
 rules:
@@ -276,6 +286,8 @@ amount = excess_above_target * sell_excess_pct
 
 `update-prices` 会读取 `instruments.csv`，调用 AKShare 获取历史行情，再和已有 `prices.csv` 去重合并。相同 `date + symbol` 的记录以新拉取数据为准。
 
+`update-latest` 是定期任务入口，会按 `--lookback-days` 指定的最近自然日窗口拉取 `instruments.csv` 中启用标的的最新公开行情，并合并到 `sample/prices.csv`。重复执行不会产生重复行。
+
 数据源映射：
 
 ```text
@@ -283,6 +295,14 @@ kind=etf      -> ak.fund_etf_hist_em
 kind=lof      -> ak.fund_etf_hist_em
 kind=a_stock  -> ak.stock_zh_a_hist
 kind=hk_stock -> ak.stock_hk_hist
+```
+
+当 Eastmoney 历史行情接口不可用时，会自动切换到 AKShare 的备用接口：
+
+```text
+kind=etf/lof  -> ak.fund_etf_hist_sina
+kind=a_stock  -> ak.stock_zh_a_hist_tx
+kind=hk_stock -> ak.stock_hk_daily
 ```
 
 运行前需要安装依赖：
@@ -295,17 +315,17 @@ python3 -m pip install -r my_notes/finance/tools/portfolio_guard/requirements.tx
 
 ## 定期运行
 
-例如每天晚上 22:30 生成一次报告：
+例如每天晚上 22:30 更新最近行情并生成一次报告：
 
 ```cron
-30 22 * * * cd /data/dnn/qinzq/repository/current && python3 my_notes/finance/tools/portfolio_guard/portfolio_guard.py update-prices --instruments my_notes/finance/tools/portfolio_guard/instruments.csv --prices my_notes/finance/tools/portfolio_guard/sample/prices.csv --start 20240101 --end 20260608 && python3 my_notes/finance/tools/portfolio_guard/portfolio_guard.py analyze --holdings my_notes/finance/tools/portfolio_guard/sample/holdings.csv --prices my_notes/finance/tools/portfolio_guard/sample/prices.csv --config my_notes/finance/tools/portfolio_guard/config.example.yaml --out-dir my_notes/finance/tools/portfolio_guard/reports
+30 22 * * * cd /data/dnn/qinzq/repository/current && python3 my_notes/finance/tools/portfolio_guard/portfolio_guard.py update-latest --instruments my_notes/finance/tools/portfolio_guard/instruments.csv --prices my_notes/finance/tools/portfolio_guard/sample/prices.csv --lookback-days 10 && python3 my_notes/finance/tools/portfolio_guard/portfolio_guard.py analyze --holdings my_notes/finance/tools/portfolio_guard/sample/holdings.csv --prices my_notes/finance/tools/portfolio_guard/sample/prices.csv --config my_notes/finance/tools/portfolio_guard/config.example.yaml --out-dir my_notes/finance/tools/portfolio_guard/reports
 ```
 
-实际使用时，把 `sample/holdings.csv` 和 `sample/prices.csv` 替换成自己的文件。
+Windows 计划任务可使用同一条 `update-latest` 命令，工作目录设为仓库根目录；`sample/prices.csv` 会被原地合并更新。
 
 ## 后续可扩展
 
 - 增加 yfinance 数据源：美股和部分港股。
-- 增加从支付宝/券商导出的 CSV 自动映射。
+- 增加从券商导出的 CSV 自动映射。
 - 增加交易费用、申赎费、QDII 限购状态字段。
 - 增加组合级历史净值和目标组合回测。

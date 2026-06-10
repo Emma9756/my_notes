@@ -6,12 +6,12 @@ set -e
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[feat](common): codex gen core & me update gmm"
-  "secrets|[fix](fit): codex update review & me update fit"
+  "secrets|[feat](fit): codex update review & me update fit"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-# MAIN_DEFAULT_MSG="[feat](fin): codex gen 1st py finance"
-MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
+MAIN_DEFAULT_MSG="[feat](fin): codex gen price update"
+# MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"

@@ -10,7 +10,7 @@ import json
 import math
 import statistics
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -57,9 +57,47 @@ def read_config(path: Path | str | None) -> dict[str, Any]:
     if path.suffix.lower() == ".json":
         return json.loads(text)
     if yaml is None:
-        raise RuntimeError("YAML config requires PyYAML; use JSON or install pyyaml.")
+        return parse_simple_yaml(text)
     data = yaml.safe_load(text)
     return data or {}
+
+
+def parse_simple_yaml(text: str) -> dict[str, Any]:
+    """Parse the small nested-mapping YAML subset used by config.example.yaml."""
+    root: dict[str, Any] = {}
+    stack: list[tuple[int, dict[str, Any]]] = [(-1, root)]
+    for raw_line in text.splitlines():
+        line_without_comment = raw_line.split("#", 1)[0].rstrip()
+        if not line_without_comment.strip():
+            continue
+        indent = len(line_without_comment) - len(line_without_comment.lstrip(" "))
+        key, sep, value = line_without_comment.strip().partition(":")
+        if sep == "":
+            raise RuntimeError(f"Unsupported YAML line: {raw_line}")
+        while stack and indent <= stack[-1][0]:
+            stack.pop()
+        current = stack[-1][1]
+        value = value.strip()
+        if value == "":
+            child: dict[str, Any] = {}
+            current[key] = child
+            stack.append((indent, child))
+        else:
+            current[key] = parse_simple_yaml_scalar(value)
+    return root
+
+
+def parse_simple_yaml_scalar(value: str) -> Any:
+    text = value.strip().strip("\"'")
+    lowered = text.lower()
+    if lowered in {"true", "false"}:
+        return lowered == "true"
+    try:
+        if "." in text:
+            return float(text)
+        return int(text)
+    except ValueError:
+        return text
 
 
 def normalize_config(config: dict[str, Any] | None) -> dict[str, Any]:
@@ -147,17 +185,20 @@ class AksharePriceProvider:
         start = compact_date(start_date)
         end = compact_date(end_date)
 
-        if kind in {"etf", "lof"}:
-            df = self.ak.fund_etf_hist_em(symbol=symbol, period="daily", start_date=start, end_date=end, adjust="")
-            date_col, close_col = "日期", "收盘"
-        elif kind == "a_stock":
-            df = self.ak.stock_zh_a_hist(symbol=symbol, period="daily", start_date=start, end_date=end, adjust="")
-            date_col, close_col = "日期", "收盘"
-        elif kind == "hk_stock":
-            df = self.ak.stock_hk_hist(symbol=symbol, period="daily", start_date=start, end_date=end, adjust="")
-            date_col, close_col = "日期", "收盘"
-        else:
-            raise ValueError(f"Unsupported instrument kind: {kind}")
+        try:
+            if kind in {"etf", "lof"}:
+                df = self.ak.fund_etf_hist_em(symbol=symbol, period="daily", start_date=start, end_date=end, adjust="")
+                date_col, close_col = "日期", "收盘"
+            elif kind == "a_stock":
+                df = self.ak.stock_zh_a_hist(symbol=symbol, period="daily", start_date=start, end_date=end, adjust="")
+                date_col, close_col = "日期", "收盘"
+            elif kind == "hk_stock":
+                df = self.ak.stock_hk_hist(symbol=symbol, period="daily", start_date=start, end_date=end, adjust="")
+                date_col, close_col = "日期", "收盘"
+            else:
+                raise ValueError(f"Unsupported instrument kind: {kind}")
+        except Exception:
+            df, date_col, close_col = self.fetch_history_fallback(symbol, kind, start, end)
 
         rows = []
         for _, item in df.iterrows():
@@ -170,6 +211,36 @@ class AksharePriceProvider:
                 }
             )
         return rows
+
+    def fetch_history_fallback(self, symbol: str, kind: str, start: str, end: str):
+        if kind in {"etf", "lof"}:
+            df = self.ak.fund_etf_hist_sina(symbol=exchange_prefixed_symbol(symbol))
+        elif kind == "a_stock":
+            df = self.ak.stock_zh_a_hist_tx(
+                symbol=exchange_prefixed_symbol(symbol),
+                start_date=start,
+                end_date=end,
+                adjust="",
+            )
+        elif kind == "hk_stock":
+            df = self.ak.stock_hk_daily(symbol=symbol, adjust="")
+        else:
+            raise ValueError(f"Unsupported instrument kind: {kind}")
+        return filter_date_frame(df, "date", start, end), "date", "close"
+
+
+def exchange_prefixed_symbol(symbol: str) -> str:
+    code = symbol.strip().lower()
+    if code.startswith(("sh", "sz")):
+        return code
+    return ("sh" if code.startswith(("5", "6", "9")) else "sz") + code
+
+
+def filter_date_frame(df: Any, date_col: str, start: str, end: str) -> Any:
+    start_norm = normalize_date(start)
+    end_norm = normalize_date(end)
+    dates = df[date_col].astype(str).map(normalize_date)
+    return df[(dates >= start_norm) & (dates <= end_norm)]
 
 
 def merge_price_rows(
@@ -231,6 +302,22 @@ def update_prices(
         message = "\n".join(errors)
         raise RuntimeError(f"Some instruments failed while updating prices:\n{message}")
     return written
+
+
+def date_days_ago(days: int, base: datetime | None = None) -> str:
+    base = base or datetime.today()
+    return (base - timedelta(days=max(days, 0))).strftime("%Y%m%d")
+
+
+def update_latest_prices(
+    instruments_path: Path | str,
+    prices_path: Path | str,
+    lookback_days: int = 10,
+    provider: Any | None = None,
+) -> Path:
+    end_date = datetime.today().strftime("%Y%m%d")
+    start_date = date_days_ago(lookback_days)
+    return update_prices(instruments_path, prices_path, start_date, end_date, provider)
 
 
 def latest_price_map(history: dict[str, list[dict[str, Any]]]) -> dict[str, float]:
@@ -707,6 +794,12 @@ def command_update_prices(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_update_latest(args: argparse.Namespace) -> int:
+    written = update_latest_prices(args.instruments, args.prices, args.lookback_days)
+    print(f"Updated latest prices in {written}")
+    return 0
+
+
 def command_serve(args: argparse.Namespace) -> int:
     try:
         from flask import Flask
@@ -742,6 +835,17 @@ def build_parser() -> argparse.ArgumentParser:
     update.add_argument("--start", required=True, help="Start date, e.g. 20240101.")
     update.add_argument("--end", required=True, help="End date, e.g. 20260608.")
     update.set_defaults(func=command_update_prices)
+
+    latest = sub.add_parser("update-latest", help="Fetch recent prices for scheduled updates.")
+    latest.add_argument("--instruments", required=True, help="Path to instruments CSV.")
+    latest.add_argument("--prices", required=True, help="Path to prices CSV to update.")
+    latest.add_argument(
+        "--lookback-days",
+        default=10,
+        type=int,
+        help="Recent calendar-day window to refetch and merge. Default: 10.",
+    )
+    latest.set_defaults(func=command_update_latest)
 
     serve = sub.add_parser("serve", help="Start a tiny local Flask report server.")
     serve.add_argument("--holdings", required=True, help="Path to holdings CSV.")

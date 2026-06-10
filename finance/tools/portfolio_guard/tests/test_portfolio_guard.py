@@ -40,7 +40,7 @@ class PortfolioGuardTest(unittest.TestCase):
                 {
                     "account": "银河",
                     "platform": "银河证券场内",
-                    "symbol": "510300.SH",
+                    "symbol": "510300",
                     "name": "沪深300ETF",
                     "market": "A股",
                     "asset_class": "A股",
@@ -56,12 +56,12 @@ class PortfolioGuardTest(unittest.TestCase):
                 {
                     "account": "银河",
                     "platform": "银河证券场内",
-                    "symbol": "AAPL",
-                    "name": "Apple",
-                    "market": "美股",
-                    "asset_class": "美股",
+                    "symbol": "09988",
+                    "name": "阿里巴巴",
+                    "market": "港股",
+                    "asset_class": "港股",
                     "security_type": "个股",
-                    "currency": "USD",
+                    "currency": "HKD",
                     "quantity": "10",
                     "price": "200",
                     "market_value": "",
@@ -71,13 +71,13 @@ class PortfolioGuardTest(unittest.TestCase):
                 },
             ],
         )
-        config = {"base_currency": "CNY", "fx_rates": {"CNY": 1, "USD": 7.2}}
+        config = {"base_currency": "CNY", "fx_rates": {"CNY": 1, "HKD": 0.92}}
 
         analysis = self.pg.analyze_portfolio(holdings, None, config)
 
-        self.assertAlmostEqual(analysis["total_value"], 18400.0)
-        self.assertAlmostEqual(analysis["groups"]["asset_class"]["A股"]["weight"], 4000 / 18400)
-        self.assertAlmostEqual(analysis["groups"]["asset_class"]["美股"]["value"], 14400.0)
+        self.assertAlmostEqual(analysis["total_value"], 5840.0)
+        self.assertAlmostEqual(analysis["groups"]["asset_class"]["A股"]["weight"], 4000 / 5840)
+        self.assertAlmostEqual(analysis["groups"]["asset_class"]["港股"]["value"], 1840.0)
 
     def test_rebalance_recommendations_use_symbol_targets(self):
         holdings = self.write_csv(
@@ -135,13 +135,13 @@ class PortfolioGuardTest(unittest.TestCase):
             "holdings.csv",
             [
                 {
-                    "account": "支付宝",
-                    "platform": "支付宝场外",
-                    "symbol": "FUND",
-                    "name": "基金",
+                    "account": "银河",
+                    "platform": "银河证券场内",
+                    "symbol": "161226",
+                    "name": "白银基金",
                     "market": "A股",
                     "asset_class": "A股",
-                    "security_type": "场外基金",
+                    "security_type": "LOF",
                     "currency": "CNY",
                     "quantity": "100",
                     "price": "8",
@@ -155,15 +155,15 @@ class PortfolioGuardTest(unittest.TestCase):
         prices = self.write_csv(
             "prices.csv",
             [
-                {"date": "2026-06-01", "symbol": "FUND", "close": "10", "currency": "CNY"},
-                {"date": "2026-06-02", "symbol": "FUND", "close": "12", "currency": "CNY"},
-                {"date": "2026-06-03", "symbol": "FUND", "close": "8", "currency": "CNY"},
+                {"date": "2026-06-01", "symbol": "161226", "close": "10", "currency": "CNY"},
+                {"date": "2026-06-02", "symbol": "161226", "close": "12", "currency": "CNY"},
+                {"date": "2026-06-03", "symbol": "161226", "close": "8", "currency": "CNY"},
             ],
         )
         config = {
             "base_currency": "CNY",
             "fx_rates": {"CNY": 1},
-            "targets": {"symbols": {"FUND": 1.0}},
+            "targets": {"symbols": {"161226": 1.0}},
             "rules": {
                 "drawdown_buy": {
                     "enabled": True,
@@ -175,7 +175,7 @@ class PortfolioGuardTest(unittest.TestCase):
         }
 
         analysis = self.pg.analyze_portfolio(holdings, prices, config)
-        metric = analysis["metrics"]["symbols"]["FUND"]
+        metric = analysis["metrics"]["symbols"]["161226"]
 
         self.assertAlmostEqual(metric["total_return"], -0.2)
         self.assertAlmostEqual(metric["max_drawdown"], -1 / 3)
@@ -234,6 +234,97 @@ class PortfolioGuardTest(unittest.TestCase):
                 ("2026-06-03", "161226", "4.3"),
             ],
         )
+
+    def test_akshare_provider_falls_back_when_primary_source_fails(self):
+        import pandas as pd
+
+        class FakeAk:
+            def fund_etf_hist_em(self, **kwargs):
+                raise RuntimeError("primary failed")
+
+            def fund_etf_hist_sina(self, symbol):
+                self.symbol = symbol
+                return pd.DataFrame(
+                    [
+                        {"date": "2026-06-01", "close": 4.0},
+                        {"date": "2026-06-02", "close": 4.2},
+                    ]
+                )
+
+        provider = object.__new__(self.pg.AksharePriceProvider)
+        provider.ak = FakeAk()
+
+        rows = provider.fetch_history(
+            {"symbol": "510300", "kind": "etf", "currency": "CNY"},
+            "20260602",
+            "20260610",
+        )
+
+        self.assertEqual(provider.ak.symbol, "sh510300")
+        self.assertEqual(rows, [{"date": "2026-06-02", "symbol": "510300", "close": 4.2, "currency": "CNY"}])
+
+    def test_update_latest_prices_uses_recent_window(self):
+        instruments = self.write_csv(
+            "instruments.csv",
+            [
+                {
+                    "symbol": "510300",
+                    "name": "300ETF",
+                    "source": "akshare",
+                    "kind": "etf",
+                    "currency": "CNY",
+                    "enabled": "1",
+                }
+            ],
+        )
+        prices = self.root / "prices.csv"
+
+        class FakeProvider:
+            def fetch_history(self, instrument, start_date, end_date):
+                self.last = (start_date, end_date)
+                return [
+                    {"date": "2026-06-09", "symbol": instrument["symbol"], "close": 4.2, "currency": "CNY"}
+                ]
+
+        provider = FakeProvider()
+        self.pg.update_latest_prices(instruments, prices, lookback_days=5, provider=provider)
+
+        self.assertEqual((len(provider.last[0]), len(provider.last[1])), (8, 8))
+        with prices.open(encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+        self.assertEqual(rows[0]["symbol"], "510300")
+        self.assertEqual(rows[0]["close"], "4.2")
+
+    def test_read_config_without_pyyaml_supports_nested_mappings(self):
+        config_path = self.root / "config.yaml"
+        config_path.write_text(
+            "\n".join(
+                [
+                    "base_currency: CNY",
+                    "fx_rates:",
+                    "  CNY: 1",
+                    "targets:",
+                    "  symbols:",
+                    "    510300: 0.18",
+                    "rules:",
+                    "  drawdown_buy:",
+                    "    enabled: true",
+                ]
+            ),
+            encoding="utf-8",
+        )
+
+        original_yaml = self.pg.yaml
+        self.pg.yaml = None
+        try:
+            config = self.pg.read_config(config_path)
+        finally:
+            self.pg.yaml = original_yaml
+
+        self.assertEqual(config["base_currency"], "CNY")
+        self.assertEqual(config["fx_rates"]["CNY"], 1)
+        self.assertAlmostEqual(config["targets"]["symbols"]["510300"], 0.18)
+        self.assertTrue(config["rules"]["drawdown_buy"]["enabled"])
 
 
 if __name__ == "__main__":
