@@ -10,7 +10,7 @@ SUBMODULES=(
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[fix](tools): codex update commit sh for sub git main"
+MAIN_DEFAULT_MSG="[feat](tools): codex gen pull sh"
 # MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
 
 # ===== 可配置：默认分支 =====
