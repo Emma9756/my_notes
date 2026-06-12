@@ -6,12 +6,12 @@ set -euo pipefail
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[feat](mm): codex gen fp8 intro & update mm holdc fp8 & update gmm holdc swizzle"
-  "secrets|[fix](common): me update eye & invest note & fit"
+  "secrets|[fix](fit): me update fit"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
-MAIN_DEFAULT_MSG="[feat](tools): codex gen pull sh"
-# MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
+# MAIN_DEFAULT_MSG="[feat](tools): codex gen pull sh"
+MAIN_DEFAULT_MSG="[sync](sub): sync sub commit"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"
