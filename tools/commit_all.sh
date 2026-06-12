@@ -5,8 +5,8 @@ set -euo pipefail
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](common): codex gen core & me update gmm"
-  "secrets|[feat](common): codex refactor 3 score & bali & eye & wechat draft"
+  "work_notes|[feat](mm): codex gen fp8 intro & update mm holdc fp8 & update gmm holdc swizzle"
+  "secrets|[fix](common): me update eye & invest note & fit"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
