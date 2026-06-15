@@ -5,7 +5,7 @@ set -euo pipefail
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](mm): codex gen fp8 intro & update mm holdc fp8 & update gmm holdc swizzle"
+  "work_notes|[feat](common): codex gen mm design & cp linear bwd docs"
   "secrets|[fix](fit): me update fit"
 )
 
