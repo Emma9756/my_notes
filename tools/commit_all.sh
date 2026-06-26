@@ -6,7 +6,7 @@ set -euo pipefail
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
   "work_notes|[fix](mm): codex update pic"
-  "secrets|[fix](fit): me update fit"
+  "secrets|[fix](life): me update note"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
