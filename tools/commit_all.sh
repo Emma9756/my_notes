@@ -5,8 +5,8 @@ set -euo pipefail
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](mm): codex support holda&b for explain.py"
-  "secrets|[fix](life): me update note"
+  "work_notes|[feat](mm): codex add llama decode"
+  "secrets|[fix](life): codex update report"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
