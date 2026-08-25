@@ -5,13 +5,13 @@ set -euo pipefail
 # ===== 可配置：子仓列表 =====
 # 格式: "path|default_commit_msg"
 SUBMODULES=(
-  "work_notes|[feat](mm): codex add mm40 1_32"
-  "secrets|[fix](life): codex update report"
+  "work_notes|[feat](mm): codex&me add bw io"
+  "secrets|[feat](life): codex add english&plan"
 )
 
 # ===== 可配置：主仓默认提交信息 =====
 # MAIN_DEFAULT_MSG="[feat](tools): codex gen pull sh"
-MAIN_DEFAULT_MSG="[feat](te): codex add mm&gmm te intro"
+MAIN_DEFAULT_MSG="[feat](vllm): codex add fp8_gemm_nt_op"
 
 # ===== 可配置：默认分支 =====
 DEFAULT_BRANCH="main"
